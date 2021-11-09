@@ -1,0 +1,30 @@
+Creating amq broker instance:
+broker1
+./artemis create --no-amqp-acceptor --no-hornetq-acceptor --no-mqtt-acceptor --no-stomp-acceptor --require-login --name broker1 --user admin --password admin ~/development/amqbrokers/broker1
+
+./artemis create --no-amqp-acceptor --no-hornetq-acceptor --no-mqtt-acceptor --no-stomp-acceptor --require-login --name broker2 --user admin --password admin --port-offset 100 ~/development/amqbrokers/broker2
+
+./artemis create --no-amqp-acceptor --no-hornetq-acceptor --no-mqtt-acceptor --no-stomp-acceptor --require-login --name broker2 --user admin --password admin --port-offset 200 ~/development/amqbrokers/broker3
+
+./artemis address create --name testQueue
+
+
+[shchavan@shchavan bin]$ ./artemis producer --destination queue://testQueue --message-count 10 --url tcp://localhost:61616 --user admin --password admin
+Connection brokerURL = tcp://localhost:61616
+Producer ActiveMQQueue[testQueue], thread=0 Started to calculate elapsed time ...
+
+Producer ActiveMQQueue[testQueue], thread=0 Produced: 10 messages
+Producer ActiveMQQueue[testQueue], thread=0 Elapsed time in second : 0 s
+Producer ActiveMQQueue[testQueue], thread=0 Elapsed time in milli second : 44 milli seconds
+
+
+[shchavan@shchavan bin]$ ./artemis consumer --url tcp://localhost:61616 --destination queue://testQueue --message-count 10 --user admin --password admin
+Connection brokerURL = tcp://localhost:61616
+Consumer:: filter = null
+Consumer ActiveMQQueue[testQueue], thread=0 wait until 10 messages are consumed
+Consumer ActiveMQQueue[testQueue], thread=0 Consumed: 10 messages
+Consumer ActiveMQQueue[testQueue], thread=0 Elapsed time in second : 0 s
+Consumer ActiveMQQueue[testQueue], thread=0 Elapsed time in milli second : 15 milli seconds
+Consumer ActiveMQQueue[testQueue], thread=0 Consumed: 10 messages
+Consumer ActiveMQQueue[testQueue], thread=0 Consumer thread finished
+
